@@ -53,46 +53,80 @@
 //        const coords = results.features[i].geometry.coordinates;
     //   const latLng = new google.maps.LatLng(coords[1], coords[0]);
 
-    const eqfeed_callback = function (results) {
-      for (let i = 0; i < results.results.length; i++) {
-        const coords = results.results[i].location;
-       const latLng = new google.maps.LatLng(coords[1], coords[0]);
-       const mname = results.results[i].title;
-       const mdesc = results.results[i].description;
-       const mstart = results.results[i].start;
-       const mend = results.results[i].end;
-        const mcategory = results.results[i].category;
-    	const mquery = "https://www.google.com/search?q="+mname.replace(/\s/g, '+');
-    	//console.log(mquery);
-       
-    	const contentString =
-        '<div id="content">' +
-        '<div id="siteNotice">' +
-        "</div>" +
-        '<h1 id="firstHeading" class="firstHeading">'+
-    	mname +
-    	'</h1>' +
-        '<div id="bodyContent">' +
-        "<p>"+
-    	mdesc +
-    	"</p>" +
-        '<p>Category: ' +
-    	mcategory +
-    	', ' +
-    	'<a href=' +
-    	mquery +
-    	'>' +
-    	mname +
-    	'</a>, ' +
-    	"Started on: " +
-        mstart +
-    	', ' +
-    	"</p>" +
-    	"</a> Ending on: " +
-    	mend +
-    	"</p>" +
-        "</div>" +
-        "</div>";
+   const eqfeed_callback = function (results) {
+  for (let i = 0; i < results.results.length; i++) {
+    const coords = results.results[i].location;
+   const latLng = new google.maps.LatLng(coords[1], coords[0]);
+   const mname = results.results[i].title;
+   const mdesc = results.results[i].description;
+   const mstart = results.results[i].start;
+   const mend = results.results[i].end;
+    const mcategory = results.results[i].category;
+	const mquery = "https://www.google.com/search?q="+mname.replace(/\s/g, '+');
+	var maddress;
+	if(results.results[i].entities[i]!=null){
+		 maddress = results.results[i].entities[i].formatted_address;
+	}
+	if(results.results[i].entities[i]==null){
+		
+		maddress = "Not Available";
+	}
+	
+	
+	//console.log(results.results[i].entities[0].formatted_address);
+	const mlocalrank = results.results[i].local_rank;
+	const mlabels = results.results[i].labels;
+	if(results.results[i].labels[1]==null){
+		
+		results.results[i].labels[1]=" ";
+	}
+	
+	//console.log(mquery);
+   
+	const contentString =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h1 id="firstHeading" class="firstHeading">'+
+	mname +
+	'</h1>' +
+    '<div id="bodyContent">' +
+    "<p>"+
+	mdesc +
+	"</p>" +
+    '<p>Category: ' +
+	mcategory +
+	', ' +
+	"</p>" +
+	'<a href=' +
+	mquery +
+	'>' +
+	mname +
+	'</a>, ' +
+	"</p>" +
+	"Address: " +
+    maddress +
+	', ' +
+	"</p>" +
+	"Started on: " +
+    mstart +
+	', ' +
+	"</p>" +
+	"</a> Ending on: " +
+	mend +
+	', ' +
+	"</p>" +
+	"Labels: " +
+    mlabels[0] +
+	', ' +
+	mlabels[1] +
+	', ' +
+	"</p>" +
+	"Local Rank: " +
+    mlocalrank +
+	"</p>" +
+    "</div>" +
+    "</div>";
         
         
         
